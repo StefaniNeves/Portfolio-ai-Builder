@@ -1,0 +1,111 @@
+
+{
+  "name": "Automacao de Triagem de Solicitacoes com IA",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "triagem-solicitacoes",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000001",
+      "name": "Receber Solicitacao",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "a1000000-0000-4000-8000-000000000001"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer COLOQUE_SUA_CHAVE_OPENAI_AQUI"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { model: 'gpt-4o-mini', response_format: { type: 'json_object' }, messages: [{ role: 'system', content: 'Você é um assistente de triagem de atendimento. Analise a solicitação e retorne somente um JSON válido com as propriedades categoria, prioridade, resumo e encaminhamento. A categoria deve identificar o assunto. A prioridade deve ser Baixa, Média ou Alta. O resumo deve ser curto. O encaminhamento deve indicar a próxima ação recomendada.' }, { role: 'user', content: 'Classifique esta solicitação: ' + JSON.stringify($('Receber Solicitacao').item.json.body) }], temperature: 0.2 } }}",
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000002",
+      "name": "Analisar com OpenAI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const content = $json.choices?.[0]?.message?.content;\n\nif (!content) {\n  throw new Error('A OpenAI nao retornou uma resposta valida.');\n}\n\nconst resultado = JSON.parse(content);\n\nreturn [{ json: resultado }];"
+      },
+      "id": "a1000000-0000-4000-8000-000000000003",
+      "name": "Organizar Resultado",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [720, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "a1000000-0000-4000-8000-000000000004",
+      "name": "Retornar Resultado",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [960, 300]
+    }
+  ],
+  "connections": {
+    "Receber Solicitacao": {
+      "main": [
+        [
+          {
+            "node": "Analisar com OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analisar com OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Organizar Resultado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Organizar Resultado": {
+      "main": [
+        [
+          {
+            "node": "Retornar Resultado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": []
+}
