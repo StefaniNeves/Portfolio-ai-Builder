@@ -1,0 +1,23 @@
+
+[
+  {
+    "pergunta": "Quais são os horários de atendimento?",
+    "resposta": "O atendimento funciona de segunda a sexta-feira, das 8h às 18h."
+  },
+  {
+    "pergunta": "Como posso solicitar suporte?",
+    "resposta": "Você pode entrar em contato com a equipe de atendimento e informar sua dúvida."
+  },
+  {
+    "pergunta": "Como acompanhar uma solicitação?",
+    "resposta": "Informe o número do protocolo à equipe responsável para consultar o andamento."
+  },
+  {
+    "pergunta": "Como faço para cancelar um pedido?",
+    "resposta": "Entre em contato com o atendimento para verificar as condições de cancelamento."
+  },
+  {
+    "pergunta": "Como falar com um atendente?",
+    "resposta": "Quando o assistente não conseguir responder, solicite atendimento humano."
+  }
+]
