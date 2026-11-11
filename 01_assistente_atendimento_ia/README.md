@@ -1,39 +1,44 @@
-# 🤖 Assistente de Atendimento com Inteligência Artificial
+🤖 Assistente de Atendimento com Inteligência Artificial
 
-Aplicação web desenvolvida em Python que utiliza Inteligência Artificial Generativa para auxiliar no atendimento ao cliente, consultando uma base de conhecimento com perguntas frequentes (FAQ).
+Um assistente virtual de atendimento desenvolvido em Python, utilizando Flask e a API da OpenAI para interpretar perguntas e gerar respostas automaticamente. O projeto combina inteligência artificial com uma base de perguntas frequentes (FAQ) armazenada em JSON, oferecendo uma experiência simples e acessível de atendimento.
 
-O projeto integra Flask e a API da OpenAI para oferecer respostas contextualizadas.
+📌 Sobre o projeto
 
-> **Atenção:** este pacote é uma estrutura de referência. Substitua o `faq.json` de exemplo pela base de conhecimento original do seu projeto e confira as funcionalidades antes de publicar.
+O Assistente de Atendimento com IA foi desenvolvido com o objetivo de demonstrar como a inteligência artificial pode ser aplicada na automação de atendimentos.
 
-## 🎯 Objetivo
+A aplicação permite que o usuário envie perguntas por meio de uma interface web e receba respostas geradas com o auxílio de um modelo de linguagem da OpenAI.
 
-Desenvolver uma solução de atendimento inteligente capaz de receber perguntas em linguagem natural e fornecer respostas com base em informações previamente cadastradas.
+Além da integração com IA, o sistema utiliza uma base de perguntas frequentes para fornecer contexto às respostas, tornando o atendimento mais direcionado.
 
-## ✨ Funcionalidades
+O projeto também apresenta conceitos importantes de desenvolvimento de software, como integração com APIs externas, organização de arquivos, manipulação de dados JSON, configuração de variáveis de ambiente e tratamento de erros.
 
-- Interface web para interação com o assistente.
-- Envio de perguntas em linguagem natural.
-- Integração com a API da OpenAI.
-- Consulta contextualizada a uma base de conhecimento em JSON.
-- Validação de perguntas vazias.
-- Tratamento de erros durante o atendimento.
-- Testes automatizados com Pytest.
+🎯 Objetivos
 
-## 🛠️ Tecnologias
+- Desenvolver um assistente virtual utilizando inteligência artificial.
+- Automatizar respostas para perguntas dos usuários.
+- Integrar uma aplicação Python com a API da OpenAI.
+- Utilizar uma base de conhecimento em formato JSON.
+- Desenvolver uma interface web simples e intuitiva.
+- Aplicar conceitos de desenvolvimento backend e frontend.
+- Praticar organização de código, testes e documentação.
 
-- Python
-- Flask
-- OpenAI API
-- JSON
-- HTML5, CSS3 e JavaScript
-- Pytest
-- Git e GitHub
+⚙️ Tecnologias utilizadas
 
-## 📁 Estrutura
+Tecnologia| Aplicação no projeto
+Python| Linguagem principal
+Flask| Desenvolvimento da aplicação web
+OpenAI API| Geração de respostas com inteligência artificial
+HTML5| Estrutura da interface
+CSS3| Estilização da interface
+JSON| Armazenamento das perguntas frequentes
+python-dotenv| Gerenciamento de variáveis de ambiente
+Pytest| Execução de testes automatizados
+Git e GitHub| Versionamento e hospedagem do projeto
 
-```text
+📂 Estrutura do projeto
+
 01_assistente_atendimento_ia/
+│
 ├── app.py
 ├── faq.json
 ├── requirements.txt
@@ -41,117 +46,155 @@ Desenvolver uma solução de atendimento inteligente capaz de receber perguntas 
 ├── .gitignore
 ├── test_app.py
 ├── README.md
+│
 ├── templates/
 │   └── index.html
+│
 ├── static/
 │   └── style.css
+│
 └── screenshots/
-```
+    └── README.txt
 
-## ⚙️ Como executar
+Descrição dos arquivos
 
-### 1. Pré-requisitos
+- app.py: arquivo principal da aplicação. Responsável pelas rotas, integração com a API da OpenAI e processamento das perguntas.
+- faq.json: armazena perguntas frequentes e suas respectivas respostas, utilizadas como base de conhecimento.
+- requirements.txt: lista as bibliotecas necessárias para executar o projeto.
+- .env.example: apresenta o modelo de configuração das variáveis de ambiente.
+- .gitignore: define arquivos e pastas que não devem ser enviados ao GitHub.
+- test_app.py: contém testes automatizados para verificar funcionalidades da aplicação.
+- templates/index.html: estrutura da interface web.
+- static/style.css: contém os estilos visuais da aplicação.
+- screenshots/: diretório reservado para imagens da execução do sistema.
 
-- Python 3.10 ou superior
-- Uma chave de API da OpenAI
+🚀 Como executar o projeto
 
-### 2. Criar e ativar ambiente virtual
+1. Pré-requisitos
+
+Antes de começar, é necessário ter instalado:
+
+- Python 3.10 ou superior.
+- Git.
+- Um editor de código, como Visual Studio Code.
+- Uma chave de API da OpenAI.
+
+2. Clonar o repositório
+
+git clone https://github.com/StefaniNeves/01_assistente_atendimento_ia.git
+
+Entre na pasta do projeto:
+
+cd 01_assistente_atendimento_ia
+
+3. Criar um ambiente virtual
+
+python -m venv venv
+
+Ative o ambiente virtual.
 
 Windows:
 
-```bash
-python -m venv .venv
-.venv\Scripts\activate
-```
+venv\Scripts\activate
 
-Linux/macOS:
+Linux e macOS:
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
+source venv/bin/activate
 
-### 3. Instalar dependências
+4. Instalar as dependências
 
-```bash
 pip install -r requirements.txt
-```
 
-### 4. Configurar variáveis de ambiente
+5. Configurar a chave da API
 
-Crie um arquivo `.env` nesta pasta, usando `.env.example` como modelo:
+Crie um arquivo chamado ".env" na raiz do projeto, utilizando o ".env.example" como referência.
 
-```env
-OPENAI_API_KEY=sua_chave_de_api
+Configure as variáveis:
+
+OPENAI_API_KEY=sua_chave_de_api_aqui
 OPENAI_MODEL=gpt-4o-mini
-```
 
-Não publique o arquivo `.env` nem compartilhe sua chave de API.
+Substitua o valor de "OPENAI_API_KEY" pela sua chave válida da OpenAI.
 
-### 5. Executar
+Importante: nunca compartilhe sua chave de API ou envie o arquivo ".env" para o GitHub.
 
-```bash
+6. Executar a aplicação
+
+Com o ambiente virtual ativado e as dependências instaladas, execute:
+
 python app.py
-```
 
-Acesse `http://127.0.0.1:5000` no navegador.
+Acesse no navegador o endereço:
 
-## 🧪 Testes
+http://127.0.0.1:5000
 
-Execute:
+💬 Como funciona
 
-```bash
+O funcionamento da aplicação pode ser dividido nas seguintes etapas:
+
+1. O usuário acessa a interface web.
+2. Digita uma pergunta no campo de atendimento.
+3. A aplicação recebe a mensagem por meio de uma rota do Flask.
+4. O sistema consulta a base de perguntas frequentes armazenada em JSON.
+5. As informações relevantes são utilizadas como contexto para a inteligência artificial.
+6. A aplicação envia a solicitação para a API da OpenAI.
+7. O modelo processa a pergunta e gera uma resposta.
+8. A resposta é apresentada ao usuário na interface.
+
+🧪 Testes automatizados
+
+O projeto possui testes automatizados utilizando o Pytest.
+
+Para executar os testes, utilize:
+
 pytest -v
-```
 
-Os testes verificam a página inicial, a validação de perguntas e o endpoint de atendimento. A resposta da IA é simulada nos testes para evitar chamadas e custos da API.
+Os testes ajudam a verificar o comportamento de partes importantes da aplicação, contribuindo para identificar possíveis erros e manter o funcionamento esperado do sistema.
 
-## 🔄 Fluxo de funcionamento
+🔐 Segurança e configuração
 
-1. O usuário envia uma pergunta pela interface.
-2. O Flask recebe a solicitação no endpoint `/perguntar`.
-3. A aplicação valida a entrada e carrega a base FAQ.
-4. A FAQ é enviada como contexto para a API da OpenAI.
-5. O modelo gera uma resposta contextualizada.
-6. A resposta é devolvida à interface.
+Alguns cuidados foram considerados na organização do projeto:
 
-## 📸 Demonstração
+- Utilização de variáveis de ambiente para armazenar informações sensíveis.
+- Arquivo ".gitignore" para evitar o envio de arquivos desnecessários.
+- Separação entre código Python, interface e estilos.
+- Uso de arquivo de exemplo para orientar a configuração do ambiente.
 
-Adicione capturas reais da aplicação na pasta `screenshots/`, por exemplo:
+📚 Conhecimentos aplicados
 
-- `tela-inicial.png`
-- `pergunta-enviada.png`
-- `resposta-ia.png`
+Durante o desenvolvimento deste projeto, são trabalhados conceitos relacionados a:
 
-Quando as imagens estiverem disponíveis, você poderá incluí-las aqui:
+- Programação em Python.
+- Desenvolvimento de aplicações web com Flask.
+- Integração com APIs REST.
+- Requisições HTTP.
+- Manipulação de arquivos JSON.
+- Inteligência Artificial Generativa.
+- Engenharia de prompts.
+- Variáveis de ambiente.
+- Testes automatizados.
+- Organização e documentação de projetos.
 
-```markdown
-![Tela inicial](screenshots/tela-inicial.png)
-```
+🔮 Possíveis melhorias futuras
 
-## 🔐 Segurança
-
-- Credenciais são configuradas por variáveis de ambiente.
-- `.env` está listado no `.gitignore`.
-- Não inclua chaves, tokens ou dados pessoais no repositório.
-
-## 🚀 Melhorias futuras
+O projeto pode ser ampliado com novas funcionalidades, como:
 
 - Histórico de conversas.
-- Persistência em banco de dados.
-- Recuperação de informações mais robusta.
-- Autenticação de usuários.
-- Monitoramento de uso e custos.
-- Implantação em ambiente de produção.
+- Armazenamento de atendimentos em banco de dados.
+- Cadastro de perguntas frequentes por meio de uma interface administrativa.
+- Personalização das respostas conforme o contexto do atendimento.
+- Integração com WhatsApp.
+- Implementação de autenticação de usuários.
+- Melhorias na interface e na experiência de utilização.
 
-## 👩‍💻 Autora
+👩‍💻 Autoria
 
-**Stefani Neves**  
-Estudante de Ciência da Computação — Universidade Federal do Cariri (UFCA).
+Projeto desenvolvido como parte dos estudos em Ciência da Computação, com foco na aplicação prática de Python, desenvolvimento web e integração com inteligência artificial.
 
-- GitHub: [StefaniNeves](https://github.com/StefaniNeves)
-- LinkedIn: [Stefani Neves](https://linkedin.com/in/stefani-neves-1aa819333)
+Desenvolvedora: Stefani Neves
+
+GitHub: "StefaniNeves" (https://github.com/StefaniNeves)
 
 ---
 
-Projeto de portfólio com foco em Inteligência Artificial, desenvolvimento de software e integração de APIs.
+⭐ Projeto desenvolvido para fins de aprendizado e prática de desenvolvimento de soluções utilizando Inteligência Artificial.
