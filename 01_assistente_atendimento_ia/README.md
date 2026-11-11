@@ -67,6 +67,7 @@ Descrição dos arquivos
 - templates/index.html: estrutura da interface web.
 - static/style.css: contém os estilos visuais da aplicação.
 - screenshots/: diretório reservado para imagens da execução do sistema.
+- Observação: As imagens desta seção são ilustrativas e representam uma demonstração visual da interface proposta para o projeto. Elas não correspondem a registros de uma execução real da aplicação.
 
 🚀 Como executar o projeto
 
