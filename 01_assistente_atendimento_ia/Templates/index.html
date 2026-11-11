@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistente de Atendimento com IA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="container">
+        <section class="chat">
+            <h1>Assistente de Atendimento</h1>
+            <p class="descricao">
+                Tire suas dúvidas utilizando nosso assistente inteligente.
+            </p>
+
+            <div id="mensagens" class="mensagens" aria-live="polite">
+                <div class="mensagem assistente">
+                    Olá! Como posso ajudar você hoje?
+                </div>
+            </div>
+
+            <form id="formulario">
+                <input
+                    type="text"
+                    id="pergunta"
+                    placeholder="Digite sua pergunta..."
+                    autocomplete="off"
+                    required
+                >
+                <button type="submit" id="enviar">Enviar</button>
+            </form>
+            <p id="status" role="status"></p>
+        </section>
+    </main>
+
+    <script>
+        const formulario = document.getElementById("formulario");
+        const campoPergunta = document.getElementById("pergunta");
+        const mensagens = document.getElementById("mensagens");
+        const status = document.getElementById("status");
+        const botao = document.getElementById("enviar");
+
+        function adicionarMensagem(texto, tipo) {
+            const elemento = document.createElement("div");
+            elemento.className = `mensagem ${tipo}`;
+            elemento.textContent = texto;
+            mensagens.appendChild(elemento);
+            mensagens.scrollTop = mensagens.scrollHeight;
+        }
+
+        formulario.addEventListener("submit", async (evento) => {
+            evento.preventDefault();
+            const texto = campoPergunta.value.trim();
+            if (!texto) return;
+
+            adicionarMensagem(texto, "usuario");
+            campoPergunta.value = "";
+            botao.disabled = true;
+            status.textContent = "Consultando o assistente...";
+
+            try {
+                const resposta = await fetch("/perguntar", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({pergunta: texto})
+                });
+
+                const dados = await resposta.json();
+                if (!resposta.ok) throw new Error(dados.erro || "Erro na solicitação.");
+
+                adicionarMensagem(dados.resposta, "assistente");
+                status.textContent = "";
+            } catch (erro) {
+                adicionarMensagem(
+                    erro.message || "Ocorreu um erro. Tente novamente.",
+                    "erro"
+                );
+                status.textContent = "";
+            } finally {
+                botao.disabled = false;
+                campoPergunta.focus();
+            }
+        });
+    </script>
+</body>
+</html>
