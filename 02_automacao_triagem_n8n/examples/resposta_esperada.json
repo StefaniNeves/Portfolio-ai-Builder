@@ -1,0 +1,18 @@
+{
+  "sucesso": true,
+  "solicitacao": {
+    "nome": "Maria Silva",
+    "email": "maria@example.com",
+    "assunto": "Não consigo acessar minha conta",
+    "mensagem": "Tentei redefinir minha senha, mas não recebi o e-mail de recuperação.",
+    "recebidoEm": "2026-01-01T12:00:00.000Z"
+  },
+  "triagem": {
+    "categoria": "cadastro",
+    "prioridade": "média",
+    "resumo": "Solicitante não recebeu o e-mail para redefinir a senha.",
+    "justificativa": "A solicitação está relacionada ao acesso e à recuperação de conta.",
+    "resposta_sugerida": "Olá! Vamos verificar o envio do e-mail de recuperação. Confira também sua caixa de spam."
+  },
+  "observacao": "Classificação automática sugerida por IA. Revise antes de tomar decisões ou responder ao solicitante."
+}
