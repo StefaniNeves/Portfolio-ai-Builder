@@ -1,0 +1,17 @@
+# Credenciais e segredos
+.env
+.env.*
+!.env.example
+*credential*
+*secret*
+*.pem
+*.key
+
+# Arquivos do sistema/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
