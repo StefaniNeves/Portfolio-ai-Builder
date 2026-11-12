@@ -1,0 +1,157 @@
+{
+  "name": "Automacao de Triagem de Solicitacoes com IA",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "triagem-solicitacoes",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "1b2c3d4e-0001-4000-8000-000000000001",
+      "name": "Receber solicitacao",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ],
+      "webhookId": "triagem-solicitacoes-demo"
+    },
+    {
+      "parameters": {
+        "jsCode": "const entrada = $json.body ?? $json;\n\nconst assunto = String(entrada.assunto ?? '').trim();\nconst mensagem = String(entrada.mensagem ?? '').trim();\nconst nome = String(entrada.nome ?? 'Não informado').trim();\nconst email = String(entrada.email ?? 'Não informado').trim();\n\nif (!assunto || !mensagem) {\n  throw new Error('Os campos \"assunto\" e \"mensagem\" são obrigatórios.');\n}\n\nreturn [{\n  json: {\n    nome,\n    email,\n    assunto,\n    mensagem,\n    recebidoEm: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "1b2c3d4e-0002-4000-8000-000000000002",
+      "name": "Validar e organizar dados",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ { model: 'gpt-4o-mini', temperature: 0.2, response_format: { type: 'json_object' }, messages: [ { role: 'system', content: 'Você é um assistente de triagem de solicitações de suporte. Analise a solicitação e retorne exclusivamente um JSON válido com as chaves categoria, prioridade, resumo, justificativa e resposta_sugerida. categoria deve ser uma destas: financeiro, técnico, cadastro, comercial ou outros. prioridade deve ser baixa, média ou alta. Não invente informações e seja objetivo. A resposta_sugerida deve ser educada e não deve afirmar que um problema foi resolvido.' }, { role: 'user', content: 'Nome: ' + $json.nome + '\\\\nE-mail: ' + $json.email + '\\\\nAssunto: ' + $json.assunto + '\\\\nMensagem: ' + $json.mensagem } ] } }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "1b2c3d4e-0003-4000-8000-000000000003",
+      "name": "Classificar com OpenAI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        700,
+        300
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const original = $('Validar e organizar dados').first().json;\n\nif ($json.error || !$json.choices?.[0]?.message?.content) {\n  return [{\n    json: {\n      sucesso: false,\n      mensagem: 'Não foi possível concluir a triagem automática. Encaminhe a solicitação para análise manual.',\n      solicitacao: original,\n      erro: $json.error?.message ?? 'Resposta inesperada do serviço de IA.'\n    }\n  }];\n}\n\nlet classificacao;\ntry {\n  classificacao = JSON.parse($json.choices[0].message.content);\n} catch (e) {\n  return [{\n    json: {\n      sucesso: false,\n      mensagem: 'A IA retornou um formato que não pôde ser interpretado. Encaminhe para análise manual.',\n      solicitacao: original\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    sucesso: true,\n    solicitacao: original,\n    triagem: {\n      categoria: classificacao.categoria ?? 'outros',\n      prioridade: classificacao.prioridade ?? 'média',\n      resumo: classificacao.resumo ?? '',\n      justificativa: classificacao.justificativa ?? '',\n      resposta_sugerida: classificacao.resposta_sugerida ?? ''\n    },\n    observacao: 'Classificação automática sugerida por IA. Revise antes de tomar decisões ou responder ao solicitante.'\n  }\n}];"
+      },
+      "id": "1b2c3d4e-0004-4000-8000-000000000004",
+      "name": "Formatar resultado da triagem",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        940,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": "={{ $json.sucesso ? 200 : 502 }}"
+        }
+      },
+      "id": "1b2c3d4e-0005-4000-8000-000000000005",
+      "name": "Responder solicitante",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1180,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Receber solicitacao": {
+      "main": [
+        [
+          {
+            "node": "Validar e organizar dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar e organizar dados": {
+      "main": [
+        [
+          {
+            "node": "Classificar com OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classificar com OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Formatar resultado da triagem",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Formatar resultado da triagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formatar resultado da triagem": {
+      "main": [
+        [
+          {
+            "node": "Responder solicitante",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "tags": []
+}
