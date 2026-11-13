@@ -1,0 +1,38 @@
+{
+  "name": "AI Business Manager - Sales Analysis Webhook",
+  "nodes": [
+    {
+      "parameters": {"httpMethod": "POST", "path": "ai-business-manager-sales", "responseMode": "responseNode", "options": {}},
+      "id": "a1b2c3d4-0001-4000-8000-000000000001",
+      "name": "Receive Sales Data",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "ai-business-manager-sales"
+    },
+    {
+      "parameters": {"jsCode": "const body = $input.first().json.body ?? $input.first().json;\nconst records = body.records;\nif (!Array.isArray(records) || records.length === 0) throw new Error('records must be a non-empty array');\nconst clean = records.map((r, i) => {\n  const quantity = Number(r.quantity); const unit_price = Number(r.unit_price);\n  if (!Number.isFinite(quantity) || !Number.isFinite(unit_price) || quantity < 0 || unit_price < 0) throw new Error(`Invalid quantity/unit_price in record ${i + 1}`);\n  return { product: String(r.product ?? 'Unspecified product'), category: String(r.category ?? 'Uncategorized'), quantity, unit_price, revenue: quantity * unit_price };\n});\nconst total_revenue = clean.reduce((s, r) => s + r.revenue, 0);\nconst units_sold = clean.reduce((s, r) => s + r.quantity, 0);\nconst byCategory = {}; for (const r of clean) byCategory[r.category] = (byCategory[r.category] ?? 0) + r.revenue;\nreturn [{ json: { record_count: clean.length, total_revenue: Number(total_revenue.toFixed(2)), units_sold, average_revenue_per_record: Number((total_revenue / clean.length).toFixed(2)), revenue_by_category: byCategory, records: clean } }];"},
+      "id": "a1b2c3d4-0002-4000-8000-000000000002",
+      "name": "Calculate Sales Metrics",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {"respondWith": "json", "responseBody": "={{ $json }}", "options": {"responseCode": 200}},
+      "id": "a1b2c3d4-0003-4000-8000-000000000003",
+      "name": "Return Analysis",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [740, 300]
+    }
+  ],
+  "connections": {
+    "Receive Sales Data": {"main": [[{"node": "Calculate Sales Metrics", "type": "main", "index": 0}]]},
+    "Calculate Sales Metrics": {"main": [[{"node": "Return Analysis", "type": "main", "index": 0}]]}
+  },
+  "active": false,
+  "settings": {"executionOrder": "v1"},
+  "pinData": {},
+  "tags": []
+}
