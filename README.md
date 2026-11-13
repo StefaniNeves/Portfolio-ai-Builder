@@ -82,7 +82,7 @@ Tecnologias
 
 Competências demonstradas: automação de workflows, integração entre serviços, estruturação de processos e aplicação de IA na classificação de informações.
 
-"Explorar Projeto 02" (./02_automacao_triagem_ia/)
+"Explorar Projeto 02" (./02_automacao_triagem_n8n/)
 
 ---
 
