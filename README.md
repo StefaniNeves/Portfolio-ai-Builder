@@ -150,7 +150,7 @@ Portfolio-ai-Builder/
 ├── 01_assistente_atendimento_ia/
 │   └── Assistente de Atendimento com IA
 │
-├── 02_automacao_triagem_ia/
+├── 02_automacao_triagem_n8n/
 │   └── Automação de Triagem com IA
 │
 ├── 03_ai_business_manager/
