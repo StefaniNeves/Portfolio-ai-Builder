@@ -189,7 +189,7 @@ Acredito no aprendizado contínuo, na resolução de problemas e na capacidade d
 
 ---
 
-Stefani Neves
+Stefani Neves | 
 Estudante de Ciência da Computação | Desenvolvedora em formação | Inteligência Artificial e Automação
 
 "GitHub" (https://github.com/StefaniNeves)
