@@ -1,0 +1,7 @@
+{
+  "records": [
+    {"product": "Coffee maker", "category": "Appliances", "quantity": 4, "unit_price": 189.9},
+    {"product": "Storage organizer", "category": "Home", "quantity": 12, "unit_price": 39.9}
+  ],
+  "use_ai": false
+}
